@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bawi Find | Submitted Claims</title>
+  <link rel="stylesheet" href="../css/ADclaimlist.css">
+</head>
+<body>
+  <div class="admin-container">
+    <h1>Submitted Claims</h1>
+    <a href="ADitems.html" class="see-items-btn">See Items</a>
+    <button id="clear-btn" class="clear-btn">Clear All Claims</button>
+
+    <table id="claims-table">
+      <thead>
+        <tr>
+          <th>Item Number</th>
+          <th>Student Name</th>
+          <th>Student ID</th>
+          <th>Program & Section</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+ 
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const tbody = document.querySelector('#claims-table tbody');
+    const clearBtn = document.getElementById('clear-btn');
+
+    function loadClaims() {
+      const claims = JSON.parse(localStorage.getItem('claims')) || [];
+      tbody.innerHTML = '';
+
+      if(claims.length === 0){
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No claims submitted yet</td></tr>';
+      } else {
+        claims.forEach(claim => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${claim.itemId}</td>
+            <td>${claim.name}</td>
+            <td>${claim.studentId}</td>
+            <td>${claim.program}</td>
+            <td>${claim.date}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+    }
+
+
+    loadClaims();
+
+
+    clearBtn.addEventListener('click', () => {
+      if(confirm('Are you sure you want to delete all submitted claims?')) {
+        localStorage.removeItem('claims');
+        loadClaims(); 
+      }
+    });
+  </script>
+
+</body>
+</html>

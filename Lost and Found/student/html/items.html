@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bawi Find | Lost Items</title>
+  <link rel="stylesheet" href="../css/items.css">
+  <style>
+    .claimed-label {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="items-container">
+    <h1>Lost Items</h1>
+
+    <div id="items-list"></div> 
+  </div>
+
+  <script>
+    const container = document.getElementById("items-list");
+
+    function getItemsFromStorage() {
+      return JSON.parse(localStorage.getItem('items')) || [];
+    }
+
+    function renderItems() {
+      const items = getItemsFromStorage();
+      container.innerHTML = "";
+
+      items.forEach(item => {
+        const buttonHTML = item.claimed
+          ? `<span class="claimed-label">Claimed</span>`
+          : `<a href="../html/claimform.html?item=${item.id}" class="claim-btn">Claim</a>`;
+
+        container.innerHTML += `
+          <div class="item">
+            <button class="dropdown-btn">
+              <img src="${item.image}" alt="${item.name}">
+              <span>${item.name} (Item #${item.id})</span>
+            </button>
+
+            <div class="dropdown-content">
+              <p>${item.description}</p>
+              <p><strong>Item Number:</strong> ${item.id}</p>
+              ${buttonHTML}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+  
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("dropdown-btn") || e.target.closest(".dropdown-btn")) {
+        const btn = e.target.closest(".dropdown-btn");
+        btn.classList.toggle("active");
+
+        const content = btn.nextElementSibling;
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      }
+    });
+
+    
+    renderItems();
+  </script>
+
+</body>
+</html>

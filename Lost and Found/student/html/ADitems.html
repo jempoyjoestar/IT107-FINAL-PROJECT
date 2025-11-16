@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bawi Find | Admin Items</title>
+  <link rel="stylesheet" href="../css/ADitems.css">
+</head>
+<body>
+  <div class="items-container">
+    <h1>Lost Items</h1>
+
+   
+    <div class="top-buttons">
+      <button id="add-item-btn" class="action-btn">Add Item</button>
+      <button id="back-btn" class="action-btn">Back</button>
+    </div>
+
+    <div id="items-list"></div>
+  </div>
+
+  <script>
+    const container = document.getElementById("items-list");
+
+    function getItemsFromStorage() {
+      return JSON.parse(localStorage.getItem('items')) || [];
+    }
+
+    function saveItemsToStorage(items) {
+      localStorage.setItem('items', JSON.stringify(items));
+    }
+
+    function renderItems() {
+      const items = getItemsFromStorage();
+      container.innerHTML = "";
+
+      items.forEach(item => {
+        const claimedClass = item.claimed ? "claimed" : "";
+        const claimedText = item.claimed ? "Claimed" : "Mark as Claimed";
+
+        container.innerHTML += `
+          <div class="item">
+            <button class="dropdown-btn">
+              <img src="${item.image}" alt="${item.name}">
+              <span>${item.name} (Item #${item.id})</span>
+            </button>
+
+            <div class="dropdown-content">
+              <p>${item.description}</p>
+              <p><strong>Item Number:</strong> ${item.id}</p>
+              <button class="mark-claimed-btn ${claimedClass}" data-id="${item.id}">${claimedText}</button>
+              <button class="delete-item-btn" data-id="${item.id}">Delete Item</button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.querySelectorAll(".mark-claimed-btn").forEach(btn => {
+        btn.addEventListener("click", () => toggleClaimed(btn.dataset.id));
+      });
+      document.querySelectorAll(".delete-item-btn").forEach(btn => {
+        btn.addEventListener("click", () => deleteItem(btn.dataset.id));
+      });
+    }
+
+    function toggleClaimed(id) {
+      let items = getItemsFromStorage();
+      items = items.map(item => {
+        if(item.id === id) {
+          item.claimed = !item.claimed; 
+        }
+        return item;
+      });
+      saveItemsToStorage(items);
+      renderItems();
+    }
+
+    function deleteItem(id) {
+      if(confirm(`Are you sure you want to delete Item #${id}?`)) {
+        let items = getItemsFromStorage();
+        items = items.filter(item => item.id !== id);
+        saveItemsToStorage(items);
+        renderItems();
+      }
+    }
+
+
+    document.getElementById("add-item-btn").addEventListener("click", () => {
+      window.location.href = "ADadditem.html";
+    });
+
+    document.getElementById("back-btn").addEventListener("click", () => {
+      window.location.href = "ADclaimlist.html";
+    });
+
+
+    document.addEventListener("click", function(e) {
+      if(e.target.classList.contains("dropdown-btn") || e.target.closest(".dropdown-btn")){
+        const btn = e.target.closest(".dropdown-btn");
+        btn.classList.toggle("active");
+
+        const content = btn.nextElementSibling;
+        if(content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      }
+    });
+
+    renderItems();
+  </script>
+</body>
+</html>

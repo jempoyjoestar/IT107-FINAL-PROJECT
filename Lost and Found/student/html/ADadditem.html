@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bawi Find | Add Item</title>
+  <link rel="stylesheet" href="../css/ADadditem.css">
+</head>
+<body>
+
+  <div class="form-container">
+    <h1>Add New Item</h1>
+    <p>Fill out the details to add a new lost item.</p>
+
+    <form id="addItemForm" class="add-item-form">
+      <div class="form-group">
+        <label for="item-name">Item Name</label>
+        <input type="text" id="item-name" name="item-name" placeholder="Enter item name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="item-number">Item Number</label>
+        <input type="text" id="item-number" name="item-number" placeholder="Enter 4-digit item number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Enter item description" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Upload Image</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+      </div>
+
+      <button type="submit" class="submit-btn">Add Item</button>
+    </form>
+
+    <a href="ADitems.html" class="back-btn">← Back to Items</a>
+  </div>
+
+  <div id="toast">
+    <span class="toast-icon">📌</span>
+    <span class="toast-message">Item Successfully Added!</span>
+  </div>
+
+  <script>
+    const form = document.getElementById('addItemForm');
+    const toast = document.getElementById('toast');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const itemName = document.getElementById('item-name').value;
+      const itemNumber = document.getElementById('item-number').value;
+      const description = document.getElementById('description').value;
+      const imageFile = document.getElementById('image').files[0];
+
+      if(!imageFile) return;
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        const imageData = reader.result;
+
+        const newItem = {
+          id: itemNumber,
+          name: itemName,
+          description: description,
+          image: imageData
+        };
+
+
+        let items = JSON.parse(localStorage.getItem('items')) || [];
+        items.push(newItem);
+        localStorage.setItem('items', JSON.stringify(items));
+
+
+        toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+
+
+        form.reset();
+      };
+      reader.readAsDataURL(imageFile);
+    });
+  </script>
+
+</body>
+</html>

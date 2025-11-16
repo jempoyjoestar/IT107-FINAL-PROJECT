@@ -1,0 +1,138 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.form-container {
+  width: 90%;
+  max-width: 500px;
+  background: #f8f8f8;
+  padding: 2.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-container h1 {
+  color: #d72638;
+  margin-bottom: 0.5rem;
+}
+
+.form-container p {
+  color: #555;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+
+.claim-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #d72638;
+  outline: none;
+}
+
+
+.submit-btn {
+  background: #d72638;
+  color: #fff;
+  border: none;
+  padding: 0.9rem 0;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #b71c29;
+  transform: translateY(-2px);
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  color: #d72638;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #b71c29;
+}
+
+
+#toast {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #4CAF50; 
+  color: white;
+  text-align: left;
+  border-radius: 8px;
+  padding: 16px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+  font-family: sans-serif;
+}
+
+
+#toast.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+
+@keyframes fadein {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+@keyframes fadeout {
+  from {opacity: 1; transform: translateY(0);}
+  to {opacity: 0; transform: translateY(-20px);}
+}
+
+
+.toast-icon {
+  font-size: 20px;
+}

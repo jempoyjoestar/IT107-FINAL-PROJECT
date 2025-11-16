@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bawi Find | Claim Form</title>
+  <link rel="stylesheet" href="../css/claimform.css">
+  <link rel="stylesheet" href="../css/toast.css">
+</head>
+<body>
+
+  <div class="form-container">
+    <h1>Claim Form</h1>
+    <p>Please fill out your details to claim your lost item.</p>
+
+    
+    <p id="item-display"><strong>Claiming Item:</strong> <span id="item-number"></span></p>
+
+    <form id="claimForm" class="claim-form">
+      <div class="form-group">
+        <label for="name">Student Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="student-id">Student ID</label>
+        <input type="text" id="student-id" name="student-id" placeholder="Enter your student ID" required>
+      </div>
+
+      <div class="form-group">
+        <label for="program">Program and Section</label>
+        <input type="text" id="program" name="program" placeholder="e.g. BSIT 2A" required>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Claim</button>
+    </form>
+
+    <a href="items.html" class="back-btn">← Back to Items</a>
+  </div>
+
+  
+  <div id="toast">
+    <span class="toast-icon">🎷</span>
+    <span class="toast-message">Claim Successfully Submitted!</span>
+  </div>
+
+  <script>
+    const form = document.getElementById('claimForm');
+    const toast = document.getElementById('toast');
+    const itemNumberSpan = document.getElementById('item-number');
+
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('item'); 
+    if(itemId){
+      itemNumberSpan.textContent = itemId;
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); 
+
+      
+      const claimData = {
+        itemId: itemId,
+        name: document.getElementById('name').value,
+        studentId: document.getElementById('student-id').value,
+        program: document.getElementById('program').value,
+        date: document.getElementById('date').value
+      };
+
+      
+      let claims = JSON.parse(localStorage.getItem('claims')) || [];
+      claims.push(claimData);
+      localStorage.setItem('claims', JSON.stringify(claims));
+
+     
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+
+   
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
